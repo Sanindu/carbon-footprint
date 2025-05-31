@@ -1,0 +1,60 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/frontend/carbon-footprint/node_modules
+/frontend/carbon-footprint/.pnp
+/frontend/carbon-footprint/pnp.js
+
+# testing
+/frontend/carbon-footprint/coverage
+
+# production
+/frontend/carbon-footprint/build
+
+# misc
+/frontend/carbon-footprintDS_Store
+/frontend/carbon-footprintenv.local
+/frontend/carbon-footprintenv.development.local
+/frontend/carbon-footprintenv.test.local
+/frontend/carbon-footprintenv.production.local
+
+/frontend/carbon-footprint/npm-debug.log*
+/frontend/carbon-footprint/yarn-debug.log*
+/frontend/carbon-footprint/yarn-error.log*
+
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE/editor config
+.vscode/
+.idea/
+*.swp
+
+# Testing coverage
+coverage/
+
+# Local server files
+*.local
+
+# Optional: macOS or Linux generated files
+*.log
+
+# Optional: React Native files
+.expo/
+
+# Optional: Python backend support
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.env.*
+
+# Optional: VS Code settings sync backups
+.history/
