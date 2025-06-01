@@ -1,105 +1,86 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-const CarSelector = ({ onEfficiencySelect }) => {
-  const [makes, setMakes] = useState([]);
-  const [models, setModels] = useState([]);
-  const [years, setYears] = useState([]);
-  const [trims, setTrims] = useState([]);
-  const [selected, setSelected] = useState({ make: '', model: '', year: '' });
+const CarSelector = ({ setSelectedCar }) => {
+    const [years, setYears] = useState([]);
+    const [makes, setMakes] = useState([]);
+    const [models, setModels] = useState([]);
+    const [selectedYear, setSelectedYear] = useState("");
+    const [selectedMake, setSelectedMake] = useState("");
+    const [selectedModel, setSelectedModel] = useState("");
 
-  useEffect(() => {
-    // Fetch car makes
-    axios.get('https://www.carqueryapi.com/api/0.3/?cmd=getMakes')
-      .then(response => {
-        const makesData = response.data.Makes;
-        setMakes(makesData);
-      });
-  }, []);
+    useEffect(() => {
+        setYears(Array.from({ length: 25 }, (_, i) => new Date().getFullYear() - i));
+    }, []);
 
-  useEffect(() => {
-    if (selected.make) {
-      // Fetch models for the selected make
-      axios.get(`https://www.carqueryapi.com/api/0.3/?cmd=getModels&make=${selected.make}`)
-        .then(response => {
-          const modelsData = response.data.Models;
-          setModels(modelsData);
-        });
-    }
-  }, [selected.make]);
-
-  useEffect(() => {
-    if (selected.make && selected.model) {
-      // Fetch years for the selected make and model
-      axios.get(`https://www.carqueryapi.com/api/0.3/?cmd=getYears&make=${selected.make}&model=${selected.model}`)
-        .then(response => {
-          const yearsData = response.data.Years;
-          setYears(yearsData);
-        });
-    }
-  }, [selected.model]);
-
-  useEffect(() => {
-    if (selected.make && selected.model && selected.year) {
-      // Fetch trims for the selected make, model, and year
-      axios.get(`https://www.carqueryapi.com/api/0.3/?cmd=getTrims&make=${selected.make}&model=${selected.model}&year=${selected.year}`)
-        .then(response => {
-          const trimsData = response.data.Trims;
-          setTrims(trimsData);
-        });
-    }
-  }, [selected.year]);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setSelected(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleTrimSelect = (trim) => {
-    // Extract fuel efficiency data from the selected trim
-    const efficiency = {
-      city: trim.model_lkm_city,
-      highway: trim.model_lkm_hwy,
-      combined: trim.model_lkm_mixed
+    const fetchMakes = async (year) => {
+        try {
+            const response = await axios.get(`http://localhost:5000/car_makes?year=${year}`);
+            console.log("Fetched Makes:", response.data); // Debugging log
+            setMakes(Array.isArray(response.data) ? response.data : []);
+        } catch (error) {
+            console.error("Error fetching car makes", error);
+        }
     };
-    onEfficiencySelect(efficiency);
-  };
 
-  return (
-    <div>
-      <label>Make:</label>
-      <select name="make" onChange={handleChange}>
-        <option value="">Select Make</option>
-        {makes.map(make => (
-          <option key={make.make_id} value={make.make_id}>{make.make_display}</option>
-        ))}
-      </select>
+    const fetchModels = async (year, make) => {
+        try {
+            const response = await axios.get(`http://localhost:5000/car_models?year=${year}&make=${make}`);
+            console.log("Fetched Models:", response.data); // Debugging log
+            setModels(Array.isArray(response.data) ? response.data : []);
+        } catch (error) {
+            console.error("Error fetching car models", error);
+        }
+    };
+const handleSelectCar = () => {
+    if (selectedYear && selectedMake && selectedModel) {
+        setSelectedCar({ year: selectedYear, make: selectedMake, model: selectedModel });
+        console.log("Selected Car:", { year: selectedYear, make: selectedMake, model: selectedModel });
+    } else {
+        console.error("Incomplete selection!");
+    }
+};
+    return (
+        <div>
+            <label>Year:</label>
+            <select 
+                onChange={(e) => { setSelectedYear(e.target.value); fetchMakes(e.target.value); }} 
+                value={selectedYear}
+            >
+                <option value="">Select Year</option>
+                {years.map(year => <option key={year} value={year}>{year}</option>)}
+            </select>
 
-      <label>Model:</label>
-      <select name="model" onChange={handleChange}>
-        <option value="">Select Model</option>
-        {models.map(model => (
-          <option key={model.model_name} value={model.model_name}>{model.model_name}</option>
-        ))}
-      </select>
+            <label>Car Make:</label>
+            <select 
+                onChange={(e) => { setSelectedMake(e.target.value); fetchModels(selectedYear, e.target.value); }} 
+                value={selectedMake} 
+                disabled={!selectedYear}
+            >
+                <option value="">Select Make</option>
+                {makes.length > 0 ? (
+                    makes.map((make, index) => <option key={index} value={make}>{make}</option>)
+                ) : (
+                    <option disabled>Loading makes...</option>
+                )}
+            </select>
 
-      <label>Year:</label>
-      <select name="year" onChange={handleChange}>
-        <option value="">Select Year</option>
-        {years.map(year => (
-          <option key={year} value={year}>{year}</option>
-        ))}
-      </select>
-
-      <label>Trim:</label>
-      <select onChange={(e) => handleTrimSelect(JSON.parse(e.target.value))}>
-        <option value="">Select Trim</option>
-        {trims.map(trim => (
-          <option key={trim.model_id} value={JSON.stringify(trim)}>{trim.model_trim}</option>
-        ))}
-      </select>
-    </div>
-  );
+            <label>Car Model:</label>
+            <select 
+                onChange={(e) => setSelectedModel(e.target.value)} 
+                value={selectedModel} 
+                disabled={!selectedMake}
+            >
+                <option value="">Select Model</option>
+                {models.length > 0 ? (
+                    models.map((model, index) => <option key={index} value={model}>{model}</option>)
+                ) : (
+                    <option disabled>Loading models...</option>
+                )}
+            </select>
+            <button onClick={handleSelectCar}>Confirm Selection</button>
+        </div>
+    );
 };
 
 export default CarSelector;
