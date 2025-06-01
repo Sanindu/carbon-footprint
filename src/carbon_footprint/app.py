@@ -5,6 +5,12 @@ from flask_caching import Cache
 import xml.etree.ElementTree as ET
 import re
 import logging
+import toml
+
+# ----------------------------
+# Load Configuration
+# ----------------------------
+config = toml.load("basic_config.toml")
 
 # ----------------------------
 # Setup and Configuration
@@ -12,23 +18,17 @@ import logging
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 
-# Simple in-memory caching
-app.config["CACHE_TYPE"] = "SimpleCache"
-app.config["CACHE_DEFAULT_TIMEOUT"] = 300  # 5 minutes
+app.config["CACHE_TYPE"] = config["flask"]["cache_type"]
+app.config["CACHE_DEFAULT_TIMEOUT"] = config["flask"]["cache_default_timeout"]
+app.config["DEBUG"] = config["flask"]["debug"]
 cache = Cache(app)
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-BASE_URL = "https://www.fueleconomy.gov/ws/rest/vehicle/menu"
-BASE_URL2 = "https://www.fueleconomy.gov/ws/rest/vehicle/menu/options"
-
-# Emission factors in kg CO₂ per gallon (US)
-EMISSION_FACTORS = {
-    "petrol": 2.31,
-    "diesel": 2.68,
-    "electric": 0.1  # Grid-dependent; placeholder
-}
+BASE_URL = config["api"]["base_url"]
+BASE_URL2 = config["api"]["base_url2"]
+EMISSION_FACTORS = config["emission_factors"]
 
 
 # ----------------------------
@@ -47,13 +47,8 @@ def extract_mpg(text):
 # ----------------------------
 # API Routes
 # ----------------------------
-
 @app.route('/carbon_footprint', methods=['POST'])
 def calculate_carbon_footprint():
-    """
-    Calculate carbon emissions based on vehicle fuel efficiency and distance.
-    Request JSON should include: year, make, model, fuel_type, distance, unit (optional)
-    """
     data = request.json
     year = data.get("year")
     make = data.get("make")
@@ -111,7 +106,6 @@ def get_car_makes():
 
 
 @app.route('/car_models', methods=['GET'])
-@cache.cached()
 def get_car_models():
     year = request.args.get("year")
     make = request.args.get("make")
@@ -129,11 +123,7 @@ def get_car_models():
 
 
 @app.route('/fuel_efficiency', methods=['POST'])
-@cache.cached()
 def get_fuel_efficiency():
-    """
-    Given a car's year, make and model, return fuel efficiency option descriptions and IDs.
-    """
     data = request.json
     year = data.get("year")
     make = data.get("make")
@@ -159,4 +149,4 @@ def get_fuel_efficiency():
 # Run Server
 # ----------------------------
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=app.config["DEBUG"])

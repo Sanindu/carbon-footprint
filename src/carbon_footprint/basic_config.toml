@@ -1,0 +1,14 @@
+#This file does not content any sensitive data. Therefore it is pushed to github. Main config.toml file is mentioned in .gitigone
+[flask]
+debug = true
+cache_type = "SimpleCache"
+cache_default_timeout = 300
+
+[api]
+base_url = "https://www.fueleconomy.gov/ws/rest/vehicle/menu"
+base_url2 = "https://www.fueleconomy.gov/ws/rest/vehicle/menu/options"
+
+[emission_factors]
+petrol = 2.31
+diesel = 2.68
+electric = 0.1
