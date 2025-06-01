@@ -15,70 +15,87 @@ const CarSelector = ({ setSelectedCar }) => {
 
     const fetchMakes = async (year) => {
         try {
-            const response = await axios.get(`http://localhost:5000/car_makes?year=${year}`);
-            console.log("Fetched Makes:", response.data); // Debugging log
-            setMakes(Array.isArray(response.data) ? response.data : []);
-        } catch (error) {
-            console.error("Error fetching car makes", error);
+            const res = await axios.get(`http://localhost:5000/car_makes?year=${year}`);
+            setMakes(Array.isArray(res.data) ? res.data : []);
+            setSelectedMake("");
+            setSelectedModel("");
+        } catch (err) {
+            console.error("Error fetching car makes", err);
         }
     };
 
     const fetchModels = async (year, make) => {
         try {
-            const response = await axios.get(`http://localhost:5000/car_models?year=${year}&make=${make}`);
-            console.log("Fetched Models:", response.data); // Debugging log
-            setModels(Array.isArray(response.data) ? response.data : []);
-        } catch (error) {
-            console.error("Error fetching car models", error);
+            const res = await axios.get(`http://localhost:5000/car_models?year=${year}&make=${make}`);
+            setModels(Array.isArray(res.data) ? res.data : []);
+            setSelectedModel("");
+        } catch (err) {
+            console.error("Error fetching car models", err);
         }
     };
-const handleSelectCar = () => {
-    if (selectedYear && selectedMake && selectedModel) {
-        setSelectedCar({ year: selectedYear, make: selectedMake, model: selectedModel });
-        console.log("Selected Car:", { year: selectedYear, make: selectedMake, model: selectedModel });
-    } else {
-        console.error("Incomplete selection!");
-    }
-};
+
+    const handleSelectCar = () => {
+        if (selectedYear && selectedMake && selectedModel) {
+            setSelectedCar({ year: selectedYear, make: selectedMake, model: selectedModel });
+        } else {
+            alert("Please complete all selections.");
+        }
+    };
+
+    const dropdownClass = "w-full p-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-green-500";
+
     return (
-        <div>
-            <label>Year:</label>
-            <select 
-                onChange={(e) => { setSelectedYear(e.target.value); fetchMakes(e.target.value); }} 
-                value={selectedYear}
-            >
-                <option value="">Select Year</option>
-                {years.map(year => <option key={year} value={year}>{year}</option>)}
-            </select>
+        <div className="space-y-4">
+            <div>
+                <label className="block text-sm font-medium mb-1">Year</label>
+                <select 
+                    className={dropdownClass}
+                    value={selectedYear}
+                    onChange={(e) => {
+                        setSelectedYear(e.target.value);
+                        fetchMakes(e.target.value);
+                    }}
+                >
+                    <option value="">Select Year</option>
+                    {years.map(year => <option key={year} value={year}>{year}</option>)}
+                </select>
+            </div>
 
-            <label>Car Make:</label>
-            <select 
-                onChange={(e) => { setSelectedMake(e.target.value); fetchModels(selectedYear, e.target.value); }} 
-                value={selectedMake} 
-                disabled={!selectedYear}
-            >
-                <option value="">Select Make</option>
-                {makes.length > 0 ? (
-                    makes.map((make, index) => <option key={index} value={make}>{make}</option>)
-                ) : (
-                    <option disabled>Loading makes...</option>
-                )}
-            </select>
+            <div>
+                <label className="block text-sm font-medium mb-1">Make</label>
+                <select 
+                    className={dropdownClass}
+                    value={selectedMake}
+                    disabled={!selectedYear}
+                    onChange={(e) => {
+                        setSelectedMake(e.target.value);
+                        fetchModels(selectedYear, e.target.value);
+                    }}
+                >
+                    <option value="">Select Make</option>
+                    {makes.map((make, index) => <option key={index} value={make}>{make}</option>)}
+                </select>
+            </div>
 
-            <label>Car Model:</label>
-            <select 
-                onChange={(e) => setSelectedModel(e.target.value)} 
-                value={selectedModel} 
-                disabled={!selectedMake}
+            <div>
+                <label className="block text-sm font-medium mb-1">Model</label>
+                <select 
+                    className={dropdownClass}
+                    value={selectedModel}
+                    disabled={!selectedMake}
+                    onChange={(e) => setSelectedModel(e.target.value)}
+                >
+                    <option value="">Select Model</option>
+                    {models.map((model, index) => <option key={index} value={model}>{model}</option>)}
+                </select>
+            </div>
+
+            <button 
+                onClick={handleSelectCar}
+                className="w-full bg-green-600 hover:bg-green-700 text-white p-2 rounded transition"
             >
-                <option value="">Select Model</option>
-                {models.length > 0 ? (
-                    models.map((model, index) => <option key={index} value={model}>{model}</option>)
-                ) : (
-                    <option disabled>Loading models...</option>
-                )}
-            </select>
-            <button onClick={handleSelectCar}>Confirm Selection</button>
+                Confirm Car Selection
+            </button>
         </div>
     );
 };
