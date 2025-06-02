@@ -5,6 +5,8 @@ This app estimates the carbon footprint of a car journey based on vehicle detail
 This project includes a REST API backend with unit tests and a CI/CD pipeline powered by GitHub Actions. Also it is designed using Application Factory Pattern software design approach.
 
 ---
+[Here is the live link to the project. Try it out.](https://carbonfootprint.sanindu.co.uk/)
+---
 
 ## Features
 
@@ -13,6 +15,7 @@ This project includes a REST API backend with unit tests and a CI/CD pipeline po
 - React frontend with user-friendly interface to visualise and input data
 - Automated testing with `pytest`
 - Continuous Integration and Deployment using GitHub Actions
+- Caching for Faster Data Retrieval
 
 ---
 # How the Calculations Work
@@ -21,10 +24,10 @@ This project includes a REST API backend with unit tests and a CI/CD pipeline po
 
 The main calculation accepts the following inputs via a POST request in JSON format:
 
-- **year**: The car’s manufacturing year (e.g., 2015)  
-- **make**: Car manufacturer (e.g., Toyota)  
-- **model**: Car model (e.g., Corolla)  
-- **fuel_type**: Type of fuel used (e.g., petrol)  
+- **year**: The car’s manufacturing year (e.g 2015)  
+- **make**: Car manufacturer (e.g Toyota)  
+- **model**: Car model (e.g Corolla)  
+- **fuel_type**: Type of fuel used (e.g petrol)  
 - **distance**: Distance travelled during the trip  
 - **unit**: Unit for distance, either "miles" or "km"
 
@@ -56,9 +59,7 @@ The main calculation accepts the following inputs via a POST request in JSON for
 
 - The carbon footprint is calculated using the formula:
 
-\[
-\text{Carbon Emissions (kg)} = \left(\frac{\text{Distance (miles)}}{\text{Fuel Efficiency (MPG)}}\right) \times \text{Emission Factor (kg CO₂/gallon)}
-\]
+$$\text{Carbon Emissions (kg)} = \left(\frac{\text{Distance (miles)}}{\text{Fuel Efficiency (MPG)}}\right) \times \text{Emission Factor (kg CO₂/gallon)}$$
 
 - In simple terms:  
 
@@ -152,7 +153,15 @@ You can see the workflow file under `.github/workflows/python-app.yml`.
 Test results and logs will be available on the **Actions** tab in the GitHub repository.
 
 ---
+## References
 
+- Vehicle fuel efficiency data and API: [fueleconomy.gov](https://www.fueleconomy.gov/ws/rest/vehicle/menu/options) 
+- Distance conversion factor (kilometres to miles):  
+  [NIST Metric-SI Conversion Factors](https://www.unitconverters.net/length/km-to-miles.htm)  
+- CO₂ absorption by trees:  
+  [Greenhouse Gas Equivalencies](https://www.viessmann.co.uk/en/heating-advice/boilers/how-much-co2-does-tree-absorb.html)
+
+---
 ## Contributing
 
 Contributions are welcome! Feel free to open issues or submit pull requests.
