@@ -59,9 +59,7 @@ The main calculation accepts the following inputs via a POST request in JSON for
 
 - The carbon footprint is calculated using the formula:
 
-\[
-\text{Carbon Emissions (kg)} = \left(\frac{\text{Distance (miles)}}{\text{Fuel Efficiency (MPG)}}\right) \times \text{Emission Factor (kg CO₂/gallon)}
-\]
+$$\text{Carbon Emissions (kg)} = \left(\frac{\text{Distance (miles)}}{\text{Fuel Efficiency (MPG)}}\right) \times \text{Emission Factor (kg CO₂/gallon)}$$
 
 - In simple terms:  
 
