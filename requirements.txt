@@ -1,0 +1,6 @@
+Flask
+requests
+flask-cors
+flask-caching
+toml
+pytest
