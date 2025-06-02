@@ -5,6 +5,8 @@ This app estimates the carbon footprint of a car journey based on vehicle detail
 This project includes a REST API backend with unit tests and a CI/CD pipeline powered by GitHub Actions. Also it is designed using Application Factory Pattern software design approach.
 
 ---
+[Here is the live link to the project. Try it out.](https://carbonfootprint.sanindu.co.uk/)
+---
 
 ## Features
 
