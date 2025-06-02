@@ -63,7 +63,7 @@ $$\text{Carbon Emissions (kg)} = \left(\frac{\text{Distance (miles)}}{\text{Fuel
 
 - In simple terms:  
 
-  - Divide the distance travelled by how many miles the car can go per gallon — this gives gallons of fuel consumed.  
+  - Divide the distance travelled by how many miles the car can go per gallon, this gives gallons of fuel consumed.  
   - Multiply the gallons by the carbon emissions per gallon to get total CO₂ emissions.
 
 ---
