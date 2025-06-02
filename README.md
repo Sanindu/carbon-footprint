@@ -154,7 +154,17 @@ You can see the workflow file under `.github/workflows/python-app.yml`.
 Test results and logs will be available on the **Actions** tab in the GitHub repository.
 
 ---
+## References
 
+- Vehicle fuel efficiency data and API: [fueleconomy.gov](https://www.fueleconomy.gov/ws/rest/vehicle/menu/options)  
+- Emission factors for different fuel types from UK BEIS Greenhouse Gas Reporting:  
+  [Greenhouse Gas Reporting Conversion Factors 2023](https://www.gov.uk/government/publications/greenhouse-gas-reporting-conversion-factors-2023)  
+- Distance conversion factor (kilometres to miles):  
+  [NIST Metric-SI Conversion Factors](https://www.nist.gov/pml/weights-and-measures/metric-si/si-units-conversion-factors)  
+- CO₂ absorption by trees:  
+  [EPA Greenhouse Gas Equivalencies Calculator](https://www.epa.gov/energy/greenhouse-gas-equivalencies-calculator)
+
+---
 ## Contributing
 
 Contributions are welcome! Feel free to open issues or submit pull requests.
