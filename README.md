@@ -21,10 +21,10 @@ This project includes a REST API backend with unit tests and a CI/CD pipeline po
 
 The main calculation accepts the following inputs via a POST request in JSON format:
 
-- **year**: The car’s manufacturing year (e.g., 2015)  
-- **make**: Car manufacturer (e.g., Toyota)  
-- **model**: Car model (e.g., Corolla)  
-- **fuel_type**: Type of fuel used (e.g., petrol)  
+- **year**: The car’s manufacturing year (e.g 2015)  
+- **make**: Car manufacturer (e.g Toyota)  
+- **model**: Car model (e.g Corolla)  
+- **fuel_type**: Type of fuel used (e.g petrol)  
 - **distance**: Distance travelled during the trip  
 - **unit**: Unit for distance, either "miles" or "km"
 
