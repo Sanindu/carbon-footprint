@@ -1,0 +1,44 @@
+name: Run Flask Tests with Pytest
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./src
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        python -m venv venv
+        source venv/bin/activate
+        pip install --upgrade pip
+        pip install -r ../requirements.txt
+        pip install pytest
+
+    - name: Ensure config file is in place
+      run: |
+        if [ ! -f carbon_footprint/basic_config.toml ]; then
+          echo "Config file not found!"
+          exit 1
+        fi
+
+    - name: Run tests
+      run: |
+        source venv/bin/activate
+        pytest ../tests
