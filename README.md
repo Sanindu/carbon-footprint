@@ -15,7 +15,64 @@ This project includes a REST API backend with unit tests and a CI/CD pipeline po
 - Continuous Integration and Deployment using GitHub Actions
 
 ---
+# How the Calculations Work
 
+## 1. Input Parameters
+
+The main calculation accepts the following inputs via a POST request in JSON format:
+
+- **year**: The car’s manufacturing year (e.g., 2015)  
+- **make**: Car manufacturer (e.g., Toyota)  
+- **model**: Car model (e.g., Corolla)  
+- **fuel_type**: Type of fuel used (e.g., petrol)  
+- **distance**: Distance travelled during the trip  
+- **unit**: Unit for distance, either "miles" or "km"
+
+---
+
+## 2. Fetching Vehicle Fuel Efficiency
+
+- The app sends a request to an external data source:  
+  `https://www.fueleconomy.gov/ws/rest/vehicle/menu/options`  
+  using the provided car year, make, and model.  
+
+- The response contains XML data listing different fuel efficiency options for the vehicle.  
+
+- The app extracts the fuel efficiency value, typically measured in miles per gallon (MPG).
+
+---
+
+## 3. Unit Conversion
+
+- If the user provides the distance in kilometres, the app converts it to miles because the fuel efficiency data is in miles per gallon.  
+
+- **Conversion factor:** 1 km = 0.621371 miles.
+
+---
+
+## 4. Carbon Footprint Calculation
+
+- The app uses predefined emission factors (`EMISSION_FACTORS`) for each fuel type, representing kilograms of CO₂ emitted per gallon of fuel burned.  
+
+- The carbon footprint is calculated using the formula:
+
+\[
+\text{Carbon Emissions (kg)} = \left(\frac{\text{Distance (miles)}}{\text{Fuel Efficiency (MPG)}}\right) \times \text{Emission Factor (kg CO₂/gallon)}
+\]
+
+- In simple terms:  
+
+  - Divide the distance travelled by how many miles the car can go per gallon — this gives gallons of fuel consumed.  
+  - Multiply the gallons by the carbon emissions per gallon to get total CO₂ emissions.
+
+---
+
+## 5. Output
+
+- The endpoint returns the carbon footprint rounded to two decimal places in kilograms (kg).  
+
+- Additionally, it provides an estimate of the number of fully grown trees required to absorb that amount of CO₂ in a year (assuming one tree absorbs about 21 kg of CO₂ annually).
+---
 ## Getting Started
 
 ### Prerequisites
