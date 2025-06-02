@@ -75,22 +75,22 @@ const CarbonCalculator = () => {
         setSelectedCar({ ...selectedCar, make, model: "" });
         setModels([]);
         fetchModels(selectedCar.year, make);
-        setCurrentStep(3); // Fixed: Changed from 2 to 3 to go to model selection
+        setCurrentStep(3);
     };
 
     const handleModelSelect = (model) => {
         setSelectedCar({ ...selectedCar, model });
-        setCurrentStep(4); // Fixed: Changed from 3 to 4 to go to fuel selection
+        setCurrentStep(4); 
     };
 
     const handleFuelSelect = (fuel) => {
         setFuelType(fuel);
-        setCurrentStep(5); // Fixed: Changed from 4 to 5 to go to distance input
+        setCurrentStep(5); 
     };
 
     const handleDistanceSubmit = (dist) => {
         setDistance(dist);
-        setCurrentStep(6); // Fixed: Changed from 5 to 6 to go to calculation
+        setCurrentStep(6); 
     };
 
 const calculateCarbonFootprint = async () => {
