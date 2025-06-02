@@ -15,6 +15,7 @@ This project includes a REST API backend with unit tests and a CI/CD pipeline po
 - React frontend with user-friendly interface to visualise and input data
 - Automated testing with `pytest`
 - Continuous Integration and Deployment using GitHub Actions
+- Caching for Faster Data Retrieval
 
 ---
 # How the Calculations Work
