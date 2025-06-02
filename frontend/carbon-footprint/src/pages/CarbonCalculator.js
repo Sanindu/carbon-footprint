@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ChevronRight, Car, Fuel, Route, Calculator, CheckCircle, ArrowLeft } from "lucide-react";
 import axios from "axios";
 import { motion } from "framer-motion";
+const BASE_URL = "http://127.0.0.1:5000";
 
 const CarbonCalculator = () => {
     const [currentStep, setCurrentStep] = useState(0);
@@ -37,7 +38,7 @@ const CarbonCalculator = () => {
     const fetchMakes = async (year) => {
         setIsLoading(true);
         try {
-            const response = await fetch(`http://localhost:5000/car_makes?year=${year}`);
+            const response = await fetch(`${BASE_URL}/car_makes?year=${year}`);
             const data = await response.json();
             setMakes(Array.isArray(data) ? data : []);
         } catch (err) {
@@ -51,7 +52,7 @@ const CarbonCalculator = () => {
     const fetchModels = async (year, make) => {
         setIsLoading(true);
         try {
-            const response = await fetch(`http://localhost:5000/car_models?year=${year}&make=${make}`);
+            const response = await fetch(`${BASE_URL}/car_models?year=${year}&make=${make}`);
             const data = await response.json();
             setModels(Array.isArray(data) ? data : []);
         } catch (err) {
@@ -104,7 +105,7 @@ const calculateCarbonFootprint = async () => {
     }
 
     try {
-        const response = await axios.post("http://localhost:5000/carbon_footprint", {
+        const response = await axios.post(`${BASE_URL}/carbon_footprint`, {
             ...selectedCar,
             fuel_type: fuelType,
             distance: distanceInKm,
@@ -218,7 +219,7 @@ const calculateCarbonFootprint = async () => {
                             <Calculator style={styles.headerIcon} />
                         </div>
                         <h1 style={styles.mainTitle}>Carbon Footprint Calculator</h1>
-                        <p style={styles.subtitle}>Calculate your vehicle's environmental impact step by step</p>
+                        <p style={styles.subtitle}>Every journey leaves a mark, but it doesn't have to be a lasting one. Use this carbon footprint calculator to find out how much CO₂ your car trip emits and discover exactly how many trees you need to plant to balance it out. Whether it’s a quick commute or a cross-country road trip, you can take climate action with every mile. Let’s drive towards a greener future, one tree at a time. </p>
                     </div>
                     
                     <div style={styles.stepsGrid}>
