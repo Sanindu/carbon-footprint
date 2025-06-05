@@ -2,7 +2,7 @@
 [flask]
 debug = true
 cache_type = "SimpleCache"
-cache_default_timeout = 86400
+cache_default_timeout = 10
 
 [api]
 base_url = "https://www.fueleconomy.gov/ws/rest/vehicle/menu"
